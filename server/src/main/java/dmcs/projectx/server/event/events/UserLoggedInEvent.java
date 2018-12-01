@@ -7,6 +7,6 @@ import org.springframework.context.ApplicationEvent;
 
 @Value
 @Builder
-public class UserLoggedInEvent extends ApplicationEvent {
+public class UserLoggedInEvent {
     private Credentials credentials;
 }
