@@ -16,11 +16,15 @@ public class XmlRpcChatServiceFactory implements ChatServiceFactory{
 
     private XmlRpcClient xmlRpcClient;
 
-    public XmlRpcChatServiceFactory(String url) throws MalformedURLException {
-        XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-        config.setServerURL(new URL(url));
-        xmlRpcClient = new XmlRpcClient();
-        xmlRpcClient.setConfig(config);
+    public XmlRpcChatServiceFactory(String url) {
+        try {
+            XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+            config.setServerURL(new URL(url));
+            xmlRpcClient = new XmlRpcClient();
+            xmlRpcClient.setConfig(config);
+        } catch (Exception e) {
+            throw new XmlRpcProxyException(e);
+        }
 
     }
 
