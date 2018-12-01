@@ -6,9 +6,7 @@ import dmcs.projectx.server.auth.exception.AuthExpection;
 import dmcs.projectx.server.auth.exception.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 class AuthProviderImpl implements AuthProvider {
@@ -16,25 +14,24 @@ class AuthProviderImpl implements AuthProvider {
     private Map<String, String> usernameTokenMap = new HashMap<>();
 
     @Override
-    public String logIn(Credentials credentials) throws AuthExpection {
-        String username = credentials.getUsername();
+    public String logIn(String username) throws AuthExpection {
         if(!usernameTokenMap.containsKey(username)) {
-            return doLogIn(credentials);
+            return doLogIn(username);
         } else {
-            throw handleAlreadyAuthenticated(credentials);
+            String token = usernameTokenMap.get(username);
+            throw handleAlreadyAuthenticated(username, token);
         }
     }
 
-    private AuthExpection handleAlreadyAuthenticated(Credentials credentials) {
-        String username = credentials.getUsername();
-        if (isAuthenticated(username, credentials.getToken())) {
+    private AuthExpection handleAlreadyAuthenticated(String username, String token) {
+        if (isAuthenticated(username, token)) {
             return new AlreadyLoggedInException();
         } return new BadCredentialsException();
     }
 
-    private String doLogIn(Credentials credentials) {
+    private String doLogIn(String username) {
         String uuid = UUID.randomUUID().toString();
-        usernameTokenMap.put(credentials.getUsername(), uuid);
+        usernameTokenMap.put(username, uuid);
         return uuid;
     }
 
@@ -51,5 +48,10 @@ class AuthProviderImpl implements AuthProvider {
     public boolean isAuthenticated(String username, String authToken) {
         String token = usernameTokenMap.get(username);
         return token != null && token.equals(authToken);
+    }
+
+    @Override
+    public Set<String> getActiveUsers() {
+        return usernameTokenMap.keySet();
     }
 }

@@ -1,7 +1,10 @@
 package common.api;
 
+import java.util.List;
+
 public interface ChatService {
-    boolean logIn(Credentials credentials);
-    void sendDirectMessage(Credentials credentials, String message);
-    boolean logOut(Credentials credentials);
+    void logIn(String username);
+    void sendDirectMessage(Credentials credentials, String targetName, String message);
+    void logOut(Credentials credentials);
+    List<String> getUsers();
 }

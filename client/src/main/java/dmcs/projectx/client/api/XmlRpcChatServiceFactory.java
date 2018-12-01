@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class XmlRpcChatServiceFactory implements ChatServiceFactory{
 
@@ -37,27 +38,37 @@ public class XmlRpcChatServiceFactory implements ChatServiceFactory{
         }
 
         @Override
-        public boolean logIn(Credentials credentials) {
+        public void logIn(String username) {
             try {
-               return (Boolean) xmlRpcClient.execute("logIn", Collections.singletonList(credentials));
+                xmlRpcClient.execute("logIn", Collections.singletonList(username));
             } catch (XmlRpcException e) {
                 throw new XmlRpcProxyException(e);
             }
         }
 
         @Override
-        public void sendDirectMessage(Credentials credentials, String message) {
+        public void sendDirectMessage(Credentials credentials, String targetName, String message) {
             try {
-                xmlRpcClient.execute("sendDirectMessage", Arrays.asList(credentials, message));
+                xmlRpcClient.execute("sendDirectMessage", Arrays.asList(credentials, targetName, message));
+            } catch (XmlRpcException e) {
+                throw new XmlRpcProxyException(e);
+            }
+        }
+
+
+        @Override
+        public void logOut(Credentials credentials) {
+            try {
+               xmlRpcClient.execute("logOut", Collections.singletonList(credentials));
             } catch (XmlRpcException e) {
                 throw new XmlRpcProxyException(e);
             }
         }
 
         @Override
-        public boolean logOut(Credentials credentials) {
+        public List<String> getUsers() {
             try {
-                return (Boolean) xmlRpcClient.execute("logOut", Collections.singletonList(credentials));
+                return (List<String>) xmlRpcClient.execute("getUsers", Arrays.asList());
             } catch (XmlRpcException e) {
                 throw new XmlRpcProxyException(e);
             }
