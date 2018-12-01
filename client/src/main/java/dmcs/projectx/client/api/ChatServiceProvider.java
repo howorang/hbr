@@ -9,12 +9,22 @@ import static common.config.AppConfiguration.*;
 
 public class ChatServiceProvider {
 
-    private Map<PROTOCOL_TYPE, ChatServiceFactory> factoryMap = new EnumMap<>(PROTOCOL_TYPE.class);
+    private static ChatServiceProvider INSTANCE = new ChatServiceProvider();
+
+    private ChatServiceProvider() {
+
+    }
+
+    public static ChatServiceProvider getInstance() {
+        return INSTANCE;
+    }
+
+    private Map<PROTOCOL_TYPE, ChatService> factoryMap = new EnumMap<>(PROTOCOL_TYPE.class);
 
     public ChatService get(PROTOCOL_TYPE protocolType) throws Exception {
-        ChatServiceFactory factory = factoryMap
-                .computeIfAbsent(protocolType, protocolType1 -> createNewFactory(protocolType));
-        return factory.get();
+        ChatService chatService = factoryMap
+                .computeIfAbsent(protocolType, protocolType1 -> createNewFactory(protocolType).get());
+        return chatService;
     }
 
     private ChatServiceFactory createNewFactory(PROTOCOL_TYPE protocolType) {
