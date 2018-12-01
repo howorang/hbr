@@ -1,4 +1,4 @@
-package dmcs.projectx.hbr.queue;
+package dmcs.projectx.server.queue;
 
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,9 @@
-package dmcs.projectx.hbr.auth;
+package dmcs.projectx.server.auth;
 
-import dmcs.projectx.hbr.auth.exception.AlreadyLoggedInException;
-import dmcs.projectx.hbr.auth.exception.AuthExpection;
-import dmcs.projectx.hbr.auth.exception.BadCredentialsException;
+import common.api.Credentials;
+import dmcs.projectx.server.auth.exception.AlreadyLoggedInException;
+import dmcs.projectx.server.auth.exception.AuthExpection;
+import dmcs.projectx.server.auth.exception.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

@@ -1,8 +1,6 @@
-package dmcs.projectx.hbr.service;
+package common.api;
 
-import dmcs.projectx.hbr.auth.Credentials;
-
-public interface DirectMessagingService {
+public interface ChatService {
     boolean logIn(Credentials credentials);
     void sendDirectMessage(Credentials credentials, String message);
     boolean logOut(Credentials credentials);

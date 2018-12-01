@@ -1,4 +1,4 @@
-package dmcs.projectx.hbr.auth;
+package common.api;
 
 import lombok.Data;
 

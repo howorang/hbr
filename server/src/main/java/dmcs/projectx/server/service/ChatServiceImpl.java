@@ -1,10 +1,11 @@
-package dmcs.projectx.hbr.service;
+package dmcs.projectx.server.service;
 
-import dmcs.projectx.hbr.auth.Credentials;
+import common.api.ChatService;
+import common.api.Credentials;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DirectMessagingServiceImpl implements DirectMessagingService {
+public class ChatServiceImpl implements ChatService {
     @Override
     public boolean logIn(Credentials credentials) {
         return false;
