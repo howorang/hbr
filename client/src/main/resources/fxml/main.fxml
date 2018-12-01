@@ -6,9 +6,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="dmcs.projectx.client.gui.MainController"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane prefHeight="401.0" prefWidth="437.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dmcs.projectx.client.gui.MainController">
+   <children>
+      <ListView fx:id="userList" layoutX="20.0" layoutY="14.0" prefHeight="312.0" prefWidth="238.0" />
+      <Button fx:id="chatButton" layoutX="20.0" layoutY="342.0" mnemonicParsing="false" text="Chat" />
+      <RadioButton fx:id="hessianRadio" layoutX="256.0" layoutY="21.0" mnemonicParsing="false" text="Hessian">
+         <toggleGroup>
+            <ToggleGroup fx:id="protocols" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="burlapRadio" layoutX="256.0" layoutY="48.0" mnemonicParsing="false" text="Burlap" toggleGroup="$protocols" />
+      <RadioButton layoutX="256.0" layoutY="83.0" mnemonicParsing="false" text="XmlRpc" toggleGroup="$protocols" fx:id="xmlrpcRadio" />
+   </children>
 </AnchorPane>

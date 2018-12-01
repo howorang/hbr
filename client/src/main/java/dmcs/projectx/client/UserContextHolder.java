@@ -10,7 +10,7 @@ public class UserContextHolder {
         return ourInstance;
     }
 
-    private PROTOCOL_TYPE protocolType;
+    private PROTOCOL_TYPE protocolType = PROTOCOL_TYPE.HESSIAN;
     private Credentials credentials;
 
     public PROTOCOL_TYPE getProtocolType() {

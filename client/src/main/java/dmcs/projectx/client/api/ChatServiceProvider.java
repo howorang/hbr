@@ -25,7 +25,7 @@ public class ChatServiceProvider {
         return get(PROTOCOL_TYPE.HESSIAN);
     }
 
-    public ChatService get(PROTOCOL_TYPE protocolType) throws Exception {
+    public ChatService get(PROTOCOL_TYPE protocolType) {
         ChatService chatService = factoryMap
                 .computeIfAbsent(protocolType, protocolType1 -> createNewFactory(protocolType).get());
         return chatService;
@@ -40,7 +40,7 @@ public class ChatServiceProvider {
             case XML_RPC:
                 return new XmlRpcChatServiceFactory(SERVER_URL + XMLRPC_ENDPOINT);
             default:
-                return null;
+                return new HessianChatServiceFactory(SERVER_URL + HESSIAN_ENDPOINT);
         }
     }
 }

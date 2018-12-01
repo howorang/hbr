@@ -24,7 +24,7 @@ public class ChatServiceImpl implements ChatService {
     public String logIn(String username) {
         String authToken = authProvider.logIn(username);
         eventPublisher.publishEvent(UserLoggedInEvent.builder()
-                .credentials(new Credentials(username, authToken)));
+                .credentials(new Credentials(username, authToken)).build());
         return authToken;
     }
 
