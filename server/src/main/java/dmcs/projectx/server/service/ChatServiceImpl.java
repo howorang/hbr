@@ -21,10 +21,11 @@ public class ChatServiceImpl implements ChatService {
     private final ApplicationEventPublisher eventPublisher;
 
     @Override
-    public void logIn(String username) {
+    public String logIn(String username) {
         String authToken = authProvider.logIn(username);
         eventPublisher.publishEvent(UserLoggedInEvent.builder()
                 .credentials(new Credentials(username, authToken)));
+        return authToken;
     }
 
     @Override

@@ -15,7 +15,12 @@ public class HessianChatServiceFactory implements ChatServiceFactory {
 
 
     @Override
-    public ChatService get() throws Exception {
-        return (ChatService) hessianProxyFactory.create(ChatService.class, url);
+    public ChatService get() {
+        try {
+            return (ChatService) hessianProxyFactory.create(ChatService.class, url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

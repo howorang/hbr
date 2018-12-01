@@ -6,7 +6,6 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,7 +28,7 @@ public class XmlRpcChatServiceFactory implements ChatServiceFactory{
     }
 
     @Override
-    public ChatService get() throws Exception {
+    public ChatService get() {
         return new XmlRpcChatServiceProxy(xmlRpcClient);
     }
 
@@ -42,9 +41,9 @@ public class XmlRpcChatServiceFactory implements ChatServiceFactory{
         }
 
         @Override
-        public void logIn(String username) {
+        public String logIn(String username) {
             try {
-                xmlRpcClient.execute("logIn", Collections.singletonList(username));
+               return (String) xmlRpcClient.execute("ChatService.logIn", Collections.singletonList(username));
             } catch (XmlRpcException e) {
                 throw new XmlRpcProxyException(e);
             }
@@ -53,7 +52,7 @@ public class XmlRpcChatServiceFactory implements ChatServiceFactory{
         @Override
         public void sendDirectMessage(Credentials credentials, String targetName, String message) {
             try {
-                xmlRpcClient.execute("sendDirectMessage", Arrays.asList(credentials, targetName, message));
+                xmlRpcClient.execute("ChatService.sendDirectMessage", Arrays.asList(credentials, targetName, message));
             } catch (XmlRpcException e) {
                 throw new XmlRpcProxyException(e);
             }
@@ -63,7 +62,7 @@ public class XmlRpcChatServiceFactory implements ChatServiceFactory{
         @Override
         public void logOut(Credentials credentials) {
             try {
-               xmlRpcClient.execute("logOut", Collections.singletonList(credentials));
+               xmlRpcClient.execute("ChatService.logOut", Collections.singletonList(credentials));
             } catch (XmlRpcException e) {
                 throw new XmlRpcProxyException(e);
             }
@@ -72,7 +71,7 @@ public class XmlRpcChatServiceFactory implements ChatServiceFactory{
         @Override
         public List<String> getUsers() {
             try {
-                return (List<String>) xmlRpcClient.execute("getUsers", Arrays.asList());
+                return (List<String>) xmlRpcClient.execute("ChatService.getUsers", Arrays.asList());
             } catch (XmlRpcException e) {
                 throw new XmlRpcProxyException(e);
             }

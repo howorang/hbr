@@ -1,9 +1,8 @@
 package dmcs.projectx.server.auth;
 
-import common.api.Credentials;
-import dmcs.projectx.server.auth.exception.AlreadyLoggedInException;
-import dmcs.projectx.server.auth.exception.AuthExpection;
-import dmcs.projectx.server.auth.exception.BadCredentialsException;
+import common.api.exception.exception.AlreadyLoggedInException;
+import common.api.exception.exception.AuthExpection;
+import common.api.exception.exception.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
 import java.util.*;

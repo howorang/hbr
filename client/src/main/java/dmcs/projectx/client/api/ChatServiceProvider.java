@@ -21,6 +21,10 @@ public class ChatServiceProvider {
 
     private Map<PROTOCOL_TYPE, ChatService> factoryMap = new EnumMap<>(PROTOCOL_TYPE.class);
 
+    public ChatService get() throws Exception {
+        return get(PROTOCOL_TYPE.HESSIAN);
+    }
+
     public ChatService get(PROTOCOL_TYPE protocolType) throws Exception {
         ChatService chatService = factoryMap
                 .computeIfAbsent(protocolType, protocolType1 -> createNewFactory(protocolType).get());

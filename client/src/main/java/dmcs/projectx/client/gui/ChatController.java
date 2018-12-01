@@ -6,7 +6,7 @@ public class ChatController {
 
     ChatServiceProvider chatServiceProvider = ChatServiceProvider.getInstance();
 
-    public void init() {
+    public void initialize() {
 
     }
 

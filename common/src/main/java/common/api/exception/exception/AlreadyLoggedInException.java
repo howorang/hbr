@@ -1,4 +1,4 @@
-package dmcs.projectx.server.auth.exception;
+package common.api.exception.exception;
 
 public class AlreadyLoggedInException extends AuthExpection {
 }
