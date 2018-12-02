@@ -14,4 +14,6 @@ public interface AuthProvider {
     boolean isAuthenticated(String username, String authToken);
 
     Set<String> getActiveUsers();
+
+    String getTokenFor(String username);
 }

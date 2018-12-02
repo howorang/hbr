@@ -7,8 +7,11 @@ import dmcs.projectx.client.api.ChatServiceProvider;
 import dmcs.projectx.client.queue.MessagesQueueService;
 import dmcs.projectx.client.queue.SimpleConsumer;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
-import java.awt.*;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeoutException;
@@ -43,17 +46,17 @@ public class ChatController {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String message = new String(body, Charset.defaultCharset());
-                chatTextArea.append("\n");
-                chatTextArea.append(targetNick + " : ");
-                chatTextArea.append(message);
+                chatTextArea.appendText("\n");
+                chatTextArea.appendText(targetNick + " : ");
+                chatTextArea.appendText(message);
             }
         });
         targetNickLabel.setText(targetNick);
-        sendButton.addActionListener(evnt -> {
+        sendButton.setOnAction(evnt -> {
             chatServiceProvider.get(userContextHolder.getProtocolType()).sendDirectMessage(
                     userContextHolder.getCredentials(),
                     targetNick,
-                    messageTextField.getName()
+                    messageTextField.getText()
             );
         });
     }

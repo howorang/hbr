@@ -1,5 +1,6 @@
 package dmcs.projectx.server.event;
 
+import dmcs.projectx.server.auth.AuthProvider;
 import dmcs.projectx.server.event.events.MessageSentEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,8 +13,10 @@ public class MessageEventListener {
 
     private final RabbitTemplate rabbitTemplate;
 
+    private final AuthProvider authProvider;
+
     @EventListener
     public void handleMessageSentEvent(MessageSentEvent event) {
-        rabbitTemplate.convertAndSend(event.getCredentials().getToken(), "", event.getMessage());
+        rabbitTemplate.convertAndSend(authProvider.getTokenFor(event.getTargetName()), "", event.getMessage());
     }
 }

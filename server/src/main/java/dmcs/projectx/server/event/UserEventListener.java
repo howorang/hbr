@@ -24,7 +24,7 @@ public class UserEventListener {
         rabbitAdmin.declareQueue(buildQueue(event));
         rabbitAdmin.declareExchange(createExchange(event));
         rabbitAdmin.declareBinding(createBinding(event));
-        rabbitTemplate.convertAndSend(USER_EVENTS_EXCHANGE_NAME,
+         rabbitTemplate.convertAndSend(USER_EVENTS_EXCHANGE_NAME,
                 "",
                 "ADDED:"+event.getCredentials().getUsername());
     }
