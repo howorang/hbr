@@ -17,6 +17,6 @@ public class MessageEventListener {
 
     @EventListener
     public void handleMessageSentEvent(MessageSentEvent event) {
-        jmsTemplate.convertAndSend(authProvider.getTokenFor(event.getTargetName()), event.getMessage());
+        jmsTemplate.convertAndSend(event.getTargetName() + event.getCredentials().getUsername(), event.getMessage());
     }
 }

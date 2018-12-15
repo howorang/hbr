@@ -1,19 +1,20 @@
 package dmcs.projectx.client.queue;
 
+import dmcs.projectx.client.UserContextHolder;
+
 import javax.jms.JMSException;
 import javax.jms.MessageListener;
 
 public class MessagesQueueService extends AbstractServiceQueue {
 
-    private String userId;
+    private UserContextHolder contextHolder = UserContextHolder.getInstance();
 
-    public MessagesQueueService(String userId) throws JMSException {
+    public MessagesQueueService() throws JMSException {
         super();
-        this.userId = userId;
     }
 
-    public void listenToUserQueue(MessageListener listener) throws JMSException {
-        listenToQueue(userId, listener);
+    public void listenToUserQueue(String targetName, MessageListener listener) throws JMSException {
+        listenToQueue(contextHolder.getCredentials().getUsername() + targetName, listener);
     }
 
 

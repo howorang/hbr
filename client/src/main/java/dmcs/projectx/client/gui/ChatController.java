@@ -3,6 +3,7 @@ package dmcs.projectx.client.gui;
 import dmcs.projectx.client.UserContextHolder;
 import dmcs.projectx.client.api.ChatServiceProvider;
 import dmcs.projectx.client.queue.MessagesQueueService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -36,7 +37,7 @@ public class ChatController {
     private TextField messageTextField;
 
     public void initialize() {
-        initMessageHandling();
+        Platform.runLater(this::initMessageHandling);
         targetNickLabel.setText(targetNick);
         sendButton.setOnAction(evnt -> {
             appendCurrentMessage();
@@ -56,8 +57,8 @@ public class ChatController {
 
     private void initMessageHandling() {
         try {
-            MessagesQueueService messagesQueueService = new MessagesQueueService(userContextHolder.getCredentials().getToken());
-            messagesQueueService.listenToUserQueue(message -> {
+            MessagesQueueService messagesQueueService = new MessagesQueueService();
+            messagesQueueService.listenToUserQueue(targetNick, message -> {
                 try {
                     String msg = ((TextMessage) message).getText();
                     handleMessage(msg);
