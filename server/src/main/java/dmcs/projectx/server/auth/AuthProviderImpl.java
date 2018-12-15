@@ -53,9 +53,4 @@ class AuthProviderImpl implements AuthProvider {
     public Set<String> getActiveUsers() {
         return usernameTokenMap.keySet();
     }
-
-    @Override
-    public String getTokenFor(String username) {
-        return usernameTokenMap.get(username);
-    }
 }

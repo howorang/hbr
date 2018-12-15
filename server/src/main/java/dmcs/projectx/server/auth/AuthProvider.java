@@ -15,5 +15,4 @@ public interface AuthProvider {
 
     Set<String> getActiveUsers();
 
-    String getTokenFor(String username);
 }
