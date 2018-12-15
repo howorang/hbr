@@ -22,7 +22,7 @@ public class Client extends Application {
         fxmlLoader.setLocation(getClass().getResource("/fxml/login.fxml"));
         Parent rootNode = fxmlLoader.load();
         primaryStage.setTitle("Hello World");
-        Scene scene = new Scene(rootNode, 900, 600);
+        Scene scene = new Scene(rootNode);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

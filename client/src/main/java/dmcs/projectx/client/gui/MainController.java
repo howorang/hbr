@@ -100,7 +100,7 @@ public class MainController {
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle(targetUser);
-            stage.setScene(new Scene(root, 450, 450));
+            stage.setScene(new Scene(root));
             stage.show();
             ChatController chatController = fxmlLoader.getController();
             chatController.setTargetNick(targetUser);
