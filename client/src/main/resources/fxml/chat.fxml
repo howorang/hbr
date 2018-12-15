@@ -6,12 +6,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dmcs.projectx.client.gui.ChatController">
+<AnchorPane prefHeight="400.0" prefWidth="846.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dmcs.projectx.client.gui.ChatController">
    <children>
       <Label fx:id="targetNickLabel" layoutX="22.0" layoutY="24.0" text="Label" />
       <TextArea fx:id="chatTextArea" editable="false" layoutX="14.0" layoutY="75.0" prefHeight="265.0" prefWidth="576.0" />
       <Button fx:id="sendButton" layoutX="522.0" layoutY="352.0" mnemonicParsing="false" text="Send" />
       <TextField fx:id="messageTextField" layoutX="14.0" layoutY="352.0" prefHeight="25.0" prefWidth="488.0" />
+      <RadioButton fx:id="hessianRadio" layoutX="662.0" layoutY="67.0" mnemonicParsing="false" text="Hessian">
+         <toggleGroup>
+            <ToggleGroup fx:id="protocols" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="burlapRadio" layoutX="662.0" layoutY="100.0" mnemonicParsing="false" text="Burlap" toggleGroup="$protocols" />
+      <RadioButton layoutX="662.0" layoutY="134.0" mnemonicParsing="false" text="XmlRpc" toggleGroup="$protocols" fx:id="xmlrpcRadio" />
    </children>
 </AnchorPane>

@@ -5,10 +5,7 @@ import dmcs.projectx.client.api.ChatServiceProvider;
 import dmcs.projectx.client.queue.MessagesQueueService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
@@ -36,6 +33,19 @@ public class ChatController {
     @FXML
     private TextField messageTextField;
 
+    @FXML
+    private RadioButton burlapRadio;
+
+    @FXML
+    private RadioButton hessianRadio;
+
+    @FXML
+    private RadioButton xmlrpcRadio;
+
+    @FXML
+    private ToggleGroup protocols;
+
+
     public void initialize() {
         Platform.runLater(this::initMessageHandling);
         targetNickLabel.setText(targetNick);
@@ -47,6 +57,7 @@ public class ChatController {
                     messageTextField.getText()
             );
         });
+        MainController.bindRadioButtons(protocols, burlapRadio, userContextHolder, hessianRadio, xmlrpcRadio);
     }
 
     private void appendCurrentMessage() {
