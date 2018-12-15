@@ -1,28 +1,23 @@
 package dmcs.projectx.client.gui;
 
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.Envelope;
 import dmcs.projectx.client.UserContextHolder;
 import dmcs.projectx.client.api.ChatServiceProvider;
 import dmcs.projectx.client.queue.MessagesQueueService;
-import dmcs.projectx.client.queue.SimpleConsumer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.concurrent.TimeoutException;
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
 
 public class ChatController {
 
     private ChatServiceProvider chatServiceProvider = ChatServiceProvider.getInstance();
     private UserContextHolder userContextHolder = UserContextHolder.getInstance();
-    private MessagesQueueService messagesQueueService;
 
-    public void setTargetNick(String targetNick) {
+    void setTargetNick(String targetNick) {
         this.targetNick = targetNick;
     }
 
@@ -40,17 +35,8 @@ public class ChatController {
     @FXML
     private TextField messageTextField;
 
-    public void initialize() throws IOException, TimeoutException {
-        messagesQueueService = new MessagesQueueService(userContextHolder.getCredentials().getToken());
-        messagesQueueService.listenForChatMessages(new SimpleConsumer() {
-            @Override
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                String message = new String(body, Charset.defaultCharset());
-                chatTextArea.appendText("\n");
-                chatTextArea.appendText(targetNick + " : ");
-                chatTextArea.appendText(message);
-            }
-        });
+    public void initialize() {
+        initMessageHandling();
         targetNickLabel.setText(targetNick);
         sendButton.setOnAction(evnt -> {
             chatServiceProvider.get(userContextHolder.getProtocolType()).sendDirectMessage(
@@ -61,4 +47,25 @@ public class ChatController {
         });
     }
 
+    private void initMessageHandling() {
+        try {
+            MessagesQueueService messagesQueueService = new MessagesQueueService(userContextHolder.getCredentials().getToken());
+            messagesQueueService.listenToUserQueue(message -> {
+                try {
+                    String msg = ((TextMessage) message).getText();
+                    handleMessage(msg);
+                } catch (JMSException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleMessage(String msg) {
+        chatTextArea.appendText("\n");
+        chatTextArea.appendText(targetNick + " : ");
+        chatTextArea.appendText(msg);
+    }
 }

@@ -69,6 +69,7 @@ public class XmlRpcChatServiceFactory implements ChatServiceFactory{
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public List<String> getUsers() {
             try {
                 return (List<String>) xmlRpcClient.execute("ChatService.getUsers", Arrays.asList());

@@ -21,7 +21,7 @@ public class ChatServiceProvider {
 
     private Map<PROTOCOL_TYPE, ChatService> factoryMap = new EnumMap<>(PROTOCOL_TYPE.class);
 
-    public ChatService get() throws Exception {
+    public ChatService get() {
         return get(PROTOCOL_TYPE.HESSIAN);
     }
 

@@ -1,27 +1,20 @@
 package dmcs.projectx.client.queue;
 
-import com.rabbitmq.client.Consumer;
-
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
+import javax.jms.JMSException;
+import javax.jms.MessageListener;
 
 public class MessagesQueueService extends AbstractServiceQueue {
 
-    private String authToken;
+    private String userId;
 
-    public MessagesQueueService(String authToken) throws IOException, TimeoutException {
-        this.authToken = authToken;
+    public MessagesQueueService(String userId) throws JMSException {
+        super();
+        this.userId = userId;
+    }
+
+    public void listenToUserQueue(MessageListener listener) throws JMSException {
+        listenToQueue(userId, listener);
     }
 
 
-    public void listenForChatMessages(Consumer consumer) throws IOException {
-        channel.basicConsume(authToken, true, authToken, consumer);
-    }
-
-    @Override
-    public void close() throws IOException, TimeoutException {
-        channel.basicCancel(authToken);
-        channel.close();
-        connection.close();
-    }
 }

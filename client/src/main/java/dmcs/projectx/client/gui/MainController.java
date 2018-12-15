@@ -1,27 +1,25 @@
 package dmcs.projectx.client.gui;
 
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.Envelope;
 import dmcs.projectx.client.UserContextHolder;
 import dmcs.projectx.client.api.ChatServiceProvider;
 import dmcs.projectx.client.api.PROTOCOL_TYPE;
-import dmcs.projectx.client.queue.SimpleConsumer;
 import dmcs.projectx.client.queue.UserQueueService;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,8 +48,6 @@ public class MainController {
     @FXML
     private ToggleGroup protocols;
 
-    private UserQueueService userChangesQueueService;
-
     public void initialize() throws Exception {
         bindRadioButtons(protocols, burlapRadio, userContextHolder, hessianRadio, xmlrpcRadio);
         List<String> activeUsers = chatServiceProvider.get().getUsers();
@@ -61,32 +57,39 @@ public class MainController {
                 .collect(Collectors.toList());
         users.addAll(activeUsers);
         userList.setItems(users);
+        chatButton.setOnAction(event -> openChatWindow());
+        initUserQueueHandling();
+    }
 
-        userChangesQueueService = new UserQueueService();
-        userChangesQueueService.listenForUserChanges(new SimpleConsumer() {
-            @Override
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                String message = new String(body, Charset.defaultCharset());
-                if (message.startsWith("LEFT:")) {
-                    Platform.runLater(() -> {
-                        String user = message.substring(5);
-                        if (!user.equals(userContextHolder.getCredentials().getUsername())) {
-                            users.remove(user);
-                        }
-                    });
-                } else if (message.startsWith("ADDED:")) {
-                    Platform.runLater(() -> {
-                        String user = message.substring(6);
-                        if (!user.equals(userContextHolder.getCredentials().getUsername())) {
-                            users.add(user);
-                        }
-                    });
-                }
+    private void initUserQueueHandling() throws JMSException {
+        UserQueueService userChangesQueueService = new UserQueueService();
+        userChangesQueueService.listenForUserChanges(message -> {
+            try {
+                String msg = ((TextMessage) message).getText();
+                handleMsg(msg);
+
+            } catch (JMSException e) {
+                e.printStackTrace();
             }
         });
-        chatButton.setOnAction(evnt -> {
-            openChatWindow();
-        });
+    }
+
+    private void handleMsg(String msg) {
+        if (msg.startsWith("LEFT:")) {
+            Platform.runLater(() -> {
+                String user = msg.substring(5);
+                if (!user.equals(userContextHolder.getCredentials().getUsername())) {
+                    users.remove(user);
+                }
+            });
+        } else if (msg.startsWith("ADDED:")) {
+            Platform.runLater(() -> {
+                String user = msg.substring(6);
+                if (!user.equals(userContextHolder.getCredentials().getUsername())) {
+                    users.add(user);
+                }
+            });
+        }
     }
 
     private void openChatWindow() {
@@ -106,20 +109,16 @@ public class MainController {
     }
 
     static void bindRadioButtons(ToggleGroup protocols, RadioButton burlapRadio, UserContextHolder userContextHolder, RadioButton hessianRadio, RadioButton xmlrpcRadio) {
-        protocols.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if (burlapRadio.isSelected()) {
-                    userContextHolder.setProtocolType(PROTOCOL_TYPE.BURLAP);
-                }
-                if (hessianRadio.isSelected()) {
-                    userContextHolder.setProtocolType(PROTOCOL_TYPE.HESSIAN);
-                }
-                if (xmlrpcRadio.isSelected()) {
-                    userContextHolder.setProtocolType(PROTOCOL_TYPE.XML_RPC);
-                }
+        protocols.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (burlapRadio.isSelected()) {
+                userContextHolder.setProtocolType(PROTOCOL_TYPE.BURLAP);
+            }
+            if (hessianRadio.isSelected()) {
+                userContextHolder.setProtocolType(PROTOCOL_TYPE.HESSIAN);
+            }
+            if (xmlrpcRadio.isSelected()) {
+                userContextHolder.setProtocolType(PROTOCOL_TYPE.XML_RPC);
             }
         });
     }
-
 }

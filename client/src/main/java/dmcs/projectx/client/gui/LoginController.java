@@ -1,15 +1,8 @@
 package dmcs.projectx.client.gui;
 
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.Consumer;
-import com.rabbitmq.client.Envelope;
-import com.rabbitmq.client.ShutdownSignalException;
 import common.api.Credentials;
 import dmcs.projectx.client.UserContextHolder;
 import dmcs.projectx.client.api.ChatServiceProvider;
-import dmcs.projectx.client.queue.MessagesQueueService;
-import dmcs.projectx.client.queue.SimpleConsumer;
-import dmcs.projectx.client.queue.UserQueueService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -22,12 +15,11 @@ import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 public class LoginController {
 
-    ChatServiceProvider chatServiceProvider = ChatServiceProvider.getInstance();
-    UserContextHolder userContextHolder = UserContextHolder.getInstance();
+    private ChatServiceProvider chatServiceProvider = ChatServiceProvider.getInstance();
+    private UserContextHolder userContextHolder = UserContextHolder.getInstance();
 
     @FXML
     private Button loginButton;
@@ -48,7 +40,7 @@ public class LoginController {
     private ToggleGroup protocols;
 
 
-    public void initialize() throws IOException {
+    public void initialize() {
         loginButton.setOnAction(event -> {
             try {
                 String authToken = chatServiceProvider.get(userContextHolder.getProtocolType()).logIn(nickField.getText());
