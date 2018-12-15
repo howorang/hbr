@@ -39,12 +39,19 @@ public class ChatController {
         initMessageHandling();
         targetNickLabel.setText(targetNick);
         sendButton.setOnAction(evnt -> {
+            appendCurrentMessage();
             chatServiceProvider.get(userContextHolder.getProtocolType()).sendDirectMessage(
                     userContextHolder.getCredentials(),
                     targetNick,
                     messageTextField.getText()
             );
         });
+    }
+
+    private void appendCurrentMessage() {
+        chatTextArea.appendText(userContextHolder.getCredentials().getUsername() + " : ");
+        chatTextArea.appendText(messageTextField.getText());
+        chatTextArea.appendText("\n");
     }
 
     private void initMessageHandling() {
@@ -64,8 +71,8 @@ public class ChatController {
     }
 
     private void handleMessage(String msg) {
-        chatTextArea.appendText("\n");
         chatTextArea.appendText(targetNick + " : ");
         chatTextArea.appendText(msg);
+        chatTextArea.appendText("\n");
     }
 }

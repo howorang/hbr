@@ -94,15 +94,16 @@ public class MainController {
 
     private void openChatWindow() {
         try {
+            String targetUser = userList.selectionModelProperty().getValue().getSelectedItem();
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/fxml/chat.fxml"));
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setTitle("My New Stage Title");
+            stage.setTitle(targetUser);
             stage.setScene(new Scene(root, 450, 450));
             stage.show();
             ChatController chatController = fxmlLoader.getController();
-            chatController.setTargetNick(userList.selectionModelProperty().toString());
+            chatController.setTargetNick(targetUser);
         } catch (IOException e) {
             e.printStackTrace();
         }
